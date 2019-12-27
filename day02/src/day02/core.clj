@@ -16,9 +16,17 @@
     (+ (->> (map (partial * 2) sides) (reduce +))
        smallest-side)))
 
+(defn calculate-ribbon-length [{:keys [l w h]}]
+  (let [[p1 p2] (rest (sort > [l w h]))
+        main-length (+ p1 p1 p2 p2)
+        bow-length (* l w h)]
+    (+ main-length bow-length)))
+
 (defn -main [part]
   (let [dimensions (parse-dimensions (slurp "input.txt"))]
-    (case part
-      1 (->> dimensions
-             (map calculate-wrapping-paper-size)
-             (reduce +)))))
+    (->> dimensions
+         (map (case part
+                1 calculate-wrapping-paper-size
+                2 calculate-ribbon-length
+                (throw (Exception. "`part` must be 1 or 2"))))
+         (reduce +))))
