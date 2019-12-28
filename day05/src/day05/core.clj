@@ -21,6 +21,28 @@
        (repeating-letter? s)
        (excludes-substrings? s ["ab" "cd" "pq" "xy"])))
 
-(defn -main []
-  (let [strings (str/split-lines (slurp "input.txt"))]
-    (count (filter nice? strings))))
+(defn repeating-letters? [s]
+  (loop [head (first s)
+         tail (rest s)]
+    (and (not (nil? head))
+         (or (str/includes? (str/join (rest tail)) (str head (first tail)))
+             (recur (first tail) (rest tail))))))
+
+(defn repeat-with-char-between? [s]
+  (loop [head (first s)
+         tail (rest s)]
+    (and (not (nil? head))
+         (or (= head (second tail))
+             (recur (first tail) (rest tail))))))
+
+(defn new-nice? [s]
+  (and (repeating-letters? s)
+       (repeat-with-char-between? s)))
+
+(defn -main [part]
+  (let [strings (str/split-lines (slurp "input.txt"))
+        nice-fn (case part
+                  1 nice?
+                  2 new-nice?
+                  (throw (Exception. "`part` must be 1 or 2")))]
+    (count (filter nice-fn strings))))
