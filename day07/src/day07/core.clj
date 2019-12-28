@@ -66,10 +66,14 @@
           {}
           (dep/topo-sort graph)))
 
-(defn -main []
-  (let [input (slurp "input.txt")]
-    (get (-> input
-             parse-circuit
-             build-graph
-             emulate-circuit)
-         "a")))
+(defn -main [part]
+  (let [input (slurp "input.txt")
+        circuit (parse-circuit input)
+        a-signal (get (emulate-circuit (build-graph circuit)) "a")]
+    (case (str part)
+      "1" a-signal
+      "2" (let [circuit (assoc circuit "b" {:wire "b"
+                                            :deps #{}
+                                            :fn (fn [m] (assoc m "b" a-signal))})]
+            (get (emulate-circuit (build-graph circuit)) "a"))
+      (throw (Exception. "`part` must be 1 or 2")))))
