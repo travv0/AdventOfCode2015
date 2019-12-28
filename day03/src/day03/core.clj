@@ -22,12 +22,12 @@
 
 (defn -main [part]
   (let [directions (parse-directions (slurp "input.txt"))]
-    (case part
-      1 (-> directions get-route set count)
-      2 (->> directions
-             split-directions
-             (map get-route)
-             (reduce concat)
-             set
-             count)
-      (throw (Exception. "`part` must be 1 or 2")))))
+    (println (case (Integer/parseInt part)
+               1 (-> directions get-route set count)
+               2 (->> directions
+                      split-directions
+                      (map get-route)
+                      (reduce concat)
+                      set
+                      count)
+               (throw (Exception. "`part` must be 1 or 2"))))))

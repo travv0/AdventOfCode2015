@@ -24,9 +24,9 @@
 
 (defn -main [part]
   (let [dimensions (parse-dimensions (slurp "input.txt"))]
-    (->> dimensions
-         (map (case part
-                1 calculate-wrapping-paper-size
-                2 calculate-ribbon-length
-                (throw (Exception. "`part` must be 1 or 2"))))
-         (reduce +))))
+    (println (->> dimensions
+                  (map (case (Integer/parseInt part)
+                         1 calculate-wrapping-paper-size
+                         2 calculate-ribbon-length
+                         (throw (Exception. "`part` must be 1 or 2"))))
+                  (reduce +)))))

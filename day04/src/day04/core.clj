@@ -18,7 +18,7 @@
 
 (defn -main [part]
   (let [key "bgvyzdsv"]
-    (case part
-      1 (lowest-hash-with-leading-zeros 5 key)
-      2 (lowest-hash-with-leading-zeros 6 key)
-      (throw (Exception. "`part` must be 1 or 2")))))
+    (println (case (Integer/parseInt part)
+               1 (lowest-hash-with-leading-zeros 5 key)
+               2 (lowest-hash-with-leading-zeros 6 key)
+               (throw (Exception. "`part` must be 1 or 2"))))))
