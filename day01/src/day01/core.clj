@@ -3,15 +3,15 @@
 
 (defn -main [part]
   (let [input (slurp "input.txt")]
-    (println (loop [c (first input)
-                    str (rest input)
+    (println (loop [head (first input)
+                    tail (rest input)
                     i 0
                     story 0]
-               (cond (and (= (Integer/parseInt part) 2) (= story -1)) i
-                     (nil? c) story
-                     :else (recur (first str)
-                                  (rest str)
+               (cond (and (= (str part) "2") (= story -1)) i
+                     (nil? head) story
+                     :else (recur (first tail)
+                                  (rest tail)
                                   (inc i)
-                                  (case c
+                                  (case head
                                     \( (inc story)
                                     \) (dec story))))))))

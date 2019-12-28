@@ -41,8 +41,8 @@
 
 (defn -main [part]
   (let [strings (str/split-lines (slurp "input.txt"))
-        nice-fn (case (Integer/parseInt part)
-                  1 nice?
-                  2 new-nice?
+        nice-fn (case (str part)
+                  "1" nice?
+                  "2" new-nice?
                   (throw (Exception. "`part` must be 1 or 2")))]
     (println (count (filter nice-fn strings)))))

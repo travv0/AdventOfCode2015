@@ -4,11 +4,11 @@
 
 (defn parse-dimensions [input]
   (->> input
-      str/split-lines
-      (map #(let [[_ l w h] (re-matches #"(\d+)x(\d+)x(\d+)" %)]
-              {:l (Integer/parseInt l)
-               :w (Integer/parseInt w)
-               :h (Integer/parseInt h)}))))
+       str/split-lines
+       (map #(let [[_ l w h] (re-matches #"(\d+)x(\d+)x(\d+)" %)]
+               {:l (Integer/parseInt l)
+                :w (Integer/parseInt w)
+                :h (Integer/parseInt h)}))))
 
 (defn calculate-wrapping-paper-size [{:keys [l w h]}]
   (let [sides [(* l w) (* w h) (* h l)]
@@ -25,8 +25,8 @@
 (defn -main [part]
   (let [dimensions (parse-dimensions (slurp "input.txt"))]
     (println (->> dimensions
-                  (map (case (Integer/parseInt part)
-                         1 calculate-wrapping-paper-size
-                         2 calculate-ribbon-length
+                  (map (case (str part)
+                         "1" calculate-wrapping-paper-size
+                         "2" calculate-ribbon-length
                          (throw (Exception. "`part` must be 1 or 2"))))
                   (reduce +)))))
