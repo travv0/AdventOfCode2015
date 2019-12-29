@@ -3,35 +3,26 @@
             [clojure.string :as str])
   (:gen-class))
 
-(defn get-shortest-route [nodes edges]
+(defn get-route-distance [nodes edges f start-distance]
   (let [all-options (c/permutations nodes)]
     (loop [option (first all-options)
            rest-options (rest all-options)
-           min-distance Integer/MAX_VALUE]
+           most-distance start-distance]
       (if (nil? option)
-        min-distance
+        most-distance
         (let [route (partition 2 1 option)
               distance (->> route
                             (map #(get edges (set %)))
                             (reduce +))]
           (recur (first rest-options)
                  (rest rest-options)
-                 (min distance min-distance)))))))
+                 (f distance most-distance)))))))
+
+(defn get-shortest-route [nodes edges]
+  (get-route-distance nodes edges min Integer/MAX_VALUE))
 
 (defn get-longest-route [nodes edges]
-  (let [all-options (c/permutations nodes)]
-    (loop [option (first all-options)
-           rest-options (rest all-options)
-           max-distance 0]
-      (if (nil? option)
-        max-distance
-        (let [route (partition 2 1 option)
-              distance (->> route
-                            (map #(get edges (set %)))
-                            (reduce +))]
-          (recur (first rest-options)
-                 (rest rest-options)
-                 (max distance max-distance)))))))
+  (get-route-distance nodes edges max 0))
 
 (defn parse-edges [input]
   (let [lines (str/split-lines input)]
