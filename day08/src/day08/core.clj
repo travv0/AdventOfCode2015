@@ -21,7 +21,7 @@
 (defn -main [part]
   (let [input (slurp "input.txt")
         lines (str/split-lines input)]
-    (case (str part)
-      "1" (reduce + (map count-decoded-char-difference lines))
-      "2" (reduce + (map count-encoded-char-difference lines))
-      (throw (Exception. "`part` must be 1 or 2")))))
+    (println (case (str part)
+               "1" (reduce + (map count-decoded-char-difference lines))
+               "2" (reduce + (map count-encoded-char-difference lines))
+               (throw (Exception. "`part` must be 1 or 2"))))))
