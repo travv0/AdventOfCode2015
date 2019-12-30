@@ -31,10 +31,33 @@
              (+ distance (if (> remaining-fly-time 0) (:speed reindeer) 0)))
       distance)))
 
+(defn get-distances [seconds reindeers]
+  (map (fn [reindeer]
+         (map #(distance-after % reindeer) (range 1 (inc seconds))))
+       reindeers))
+
+(defn award-points [distances]
+  (loop [head-of-distances (map first distances)
+         rest-of-distances (map rest distances)
+         points (repeat (count distances) 0)]
+    (if (every? nil? head-of-distances)
+      points
+      (let [max-distance (reduce max head-of-distances)]
+        (recur (vec (map first rest-of-distances))
+               (vec (map rest rest-of-distances))
+               (vec (map +
+                         points
+                         (map #(if (= % max-distance) 1 0)
+                              head-of-distances))))))))
+
 (defn -main [part]
-  (let [reindeer (parse-input (slurp "input.txt"))]
+  (let [reindeers (parse-input (slurp "input.txt"))
+        seconds 2503]
     (println
      (case (str part)
-       "1" (reduce max (map (partial distance-after 2503) reindeer))
-       "2" (throw (Exception. "unimplemented"))
+       "1" (reduce max (map (partial distance-after seconds) reindeers))
+       "2" (->> reindeers
+                (get-distances seconds)
+                award-points
+                (reduce max))
        (throw (Exception. "`part` must be 1 or 2"))))))
