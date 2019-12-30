@@ -20,13 +20,13 @@
 (defn find-happiness [happiness-map people]
   (let [n (count people)]
     (->> (for [i (range n)]
-          [(nth people (mod (dec i) n))
-           (nth people i)
-           (nth people (mod (inc i) n))])
-        (map (fn [[left-person person right-person]]
-               (+ (get-in happiness-map [person left-person] 0)
-                  (get-in happiness-map [person right-person] 0))))
-        (reduce +))))
+           [(nth people (mod (dec i) n))
+            (nth people i)
+            (nth people (mod (inc i) n))])
+         (map (fn [[left-person person right-person]]
+                (+ (get-in happiness-map [person left-person] 0)
+                   (get-in happiness-map [person right-person] 0))))
+         (reduce +))))
 
 (defn find-best-happiness [happiness-map]
   (let [combos (c/permutations (keys happiness-map))]
