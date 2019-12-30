@@ -43,12 +43,12 @@
     (if (every? nil? head-of-distances)
       points
       (let [max-distance (reduce max head-of-distances)]
-        (recur (vec (map first rest-of-distances))
-               (vec (map rest rest-of-distances))
-               (vec (map +
-                         points
-                         (map #(if (= % max-distance) 1 0)
-                              head-of-distances))))))))
+        (recur (doall (map first rest-of-distances))
+               (doall (map rest rest-of-distances))
+               (doall (map +
+                           points
+                           (map #(if (= % max-distance) 1 0)
+                                head-of-distances))))))))
 
 (defn -main [part]
   (let [reindeers (parse-input (slurp "input.txt"))
