@@ -53,4 +53,5 @@
     (println
      (case (str part)
        "1" new-password
-       "2" (next-valid-password new-password)))))
+       "2" (next-valid-password new-password)
+       (throw (Exception. "`part` must be 1 or 2"))))))
