@@ -35,12 +35,10 @@
 
 (defn find-ingredient-options [ingredient-count total-count]
   (let [f (fn f [options n]
-            (cond
-              (= (count options) (dec ingredient-count)) [(conj options
-                                                                (- total-count
-                                                                   (reduce +' options)))]
-              :else (mapcat #(f (conj options %) (- n %))
-                            (range 1 (- total-count (or (last options) 0))))))]
+            (if (= (count options) (dec ingredient-count))
+              [(conj options (- total-count (reduce +' options)))]
+              (mapcat #(f (conj options %) (- n %))
+                      (range 1 (- total-count (or (last options) 0))))))]
     (f [] total-count)))
 
 (defn find-best-cookie-score [cookie-score-func ingredients]
