@@ -48,8 +48,8 @@
     [player boss]))
 
 (defn run-game [player boss]
-  (cond (<= (:hit-points boss) 0) [:player player]
-        (<= (:hit-points player) 0) [:boss boss]
+  (cond (<= (:hit-points boss) 0) {:winner :player :player player :boss boss}
+        (<= (:hit-points player) 0) {:winner :boss :player player :boss boss}
         :else (let [[player boss] (run-turn player boss)]
                 (recur player boss))))
 
@@ -69,15 +69,15 @@
   (map (comp (partial filter identity) flatten)
        (c/cartesian-product weapon-options armor-options ring-options)))
 
-(defn get-lowest-cost-to-win [equipment-options boss]
+(defn get-player-cost-by-winner [equipment-options winner pred boss]
   (let [players (map (partial make-player 100) equipment-options)
         results (map #(run-game % boss) players)
-        player-victories (filter #(= (first %) :player) results)
-        equipment-costs (map (comp #(get-stat % :cost) :equipment second) player-victories)]
-    (reduce min equipment-costs)))
+        winner-victories (filter #(= (:winner %) winner) results)
+        equipment-costs (map (comp #(get-stat % :cost) :equipment :player) winner-victories)]
+    (reduce pred equipment-costs)))
 
 (defn -main [part]
   (case part
-    1 (get-lowest-cost-to-win equipment-options boss)
-    2 (throw (Exception. "part 2 is not yet implemented"))
+    1 (get-player-cost-by-winner equipment-options :player min boss)
+    2 (get-player-cost-by-winner equipment-options :boss max boss)
     (throw (Exception. "`part` must be 1 or 2"))))
