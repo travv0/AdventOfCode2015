@@ -39,8 +39,11 @@
 
 (defn attack [attacker target]
   (let [damage (:damage attacker)
-        armor (:armor target)]
-    (update target :hit-points #(- % (- damage armor)))))
+        armor (:armor target)
+        hit-point-loss (- damage armor)]
+    (update target :hit-points #(- % (if (< hit-point-loss 1)
+                                       1
+                                       hit-point-loss)))))
 
 (defn run-turn [player boss]
   (let [boss (attack player boss)
