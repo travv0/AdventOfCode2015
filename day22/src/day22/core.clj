@@ -129,12 +129,13 @@
 (defn h [state]
   (get-in state [:boss :hit-points]))
 
+(defn get-min-mana-to-win [state difficulty]
+  (->> (route (partial next-states difficulty) dist h state goal?)
+       (map get-mana)
+       (reduce +)))
+
 (defn -main [part]
   (case part
-    1 (->> (route (partial next-states :normal) dist h state goal?)
-           (map get-mana)
-           (reduce +))
-    2 (->> (route (partial next-states :hard) dist h state goal?)
-           (map get-mana)
-           (reduce +))
+    1 (get-min-mana-to-win state :normal)
+    2 (get-min-mana-to-win state :hard)
     (throw (Exception. "`part` must be 1 or 2"))))
