@@ -21,9 +21,6 @@
            {:type :ring,   :name "Defense +2", :cost  40, :damage 0, :armor 2}
            {:type :ring,   :name "Defense +3", :cost  80, :damage 0, :armor 3}])
 
-(def equipment [{:type :weapon, :name "Shortsword", :cost  10, :damage 5, :armor 0}
-                {:type :armor,  :name "Platemail",  :cost 102, :damage 0, :armor 5}])
-
 (defn get-stat [equipment stat]
   (reduce + (map #(get % stat 0) equipment)))
 
