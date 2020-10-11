@@ -58,7 +58,7 @@
                               f
                               (update :effects rest))
                     used-effects (conj used-effects (update effect :timer dec))]
-                (run-effects state used-effects))))]
+                (recur state used-effects))))]
     (-> state
         (assoc-in [:player :armor] 0)
         (assoc-in [:player :spell] nil)
