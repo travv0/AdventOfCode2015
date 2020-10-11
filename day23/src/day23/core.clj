@@ -58,5 +58,5 @@
         instructions (parse-instructions input)]
     (case part
       1 (run-instructions computer instructions)
-      2 (throw (Exception. "part 2 not yet implemented"))
+      2 (run-instructions (assoc-in computer [:registers "a"] 1) instructions)
       (throw (Exception. "`part` must be 1 or 2")))))
